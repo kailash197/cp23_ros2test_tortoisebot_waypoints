@@ -1,0 +1,9 @@
+# Goal definition
+geometry_msgs/Point position
+---
+# Result definition
+bool success
+---
+# Feedback definition
+geometry_msgs/Point position
+string state
