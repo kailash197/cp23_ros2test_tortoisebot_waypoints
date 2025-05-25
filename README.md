@@ -7,7 +7,8 @@
 ```bash
 cd ~/ros2_ws/src
 git clone https://github.com/kailash197/cp23_ros2test_tortoisebot_waypoints.git
-git checkout master
+mv cp23_ros2test_tortoisebot_waypoints/ tortoisebot_waypoints/
+cd tortoisebot_waypoints
 
 ```
 ### 2. Use `colcon` to build the project
@@ -24,7 +25,7 @@ cd ~/ros2_ws && colcon build --packages-select tortoisebot_waypoints && source i
 [Terminal 1]
 ```bash
 source /opt/ros/galactic/setup.bash
-source ~/ros2_ws/install/setup.bash
+cd ~/ros2_ws && colcon build && source install/setup.bash
 ros2 launch tortoisebot_bringup bringup.launch.py use_sim_time:=True
 
 ```
@@ -35,7 +36,7 @@ ros2 launch tortoisebot_bringup bringup.launch.py use_sim_time:=True
 [Terminal 2]
 ```bash
 source /opt/ros/galactic/setup.bash
-source ~/ros2_ws/install/setup.bash
+cd ~/ros2_ws && colcon build --packages-select tortoisebot_waypoints && source install/setup.bash
 ros2 run tortoisebot_waypoints tortoisebot_action_server
 
 ```
@@ -46,7 +47,7 @@ Execute the test file and verify if all the tests are passing properly with pass
 [Terminal 3]
 ```bash
 source /opt/ros/galactic/setup.bash
-cd ~/ros2_ws && colcon build && source install/setup.bash
+cd ~/ros2_ws && colcon build --packages-select tortoisebot_waypoints && source install/setup.bash
 colcon test --packages-select tortoisebot_waypoints --event-handler=console_direct+
 colcon test-result --all
 
@@ -55,17 +56,17 @@ colcon test-result --all
 Expected output:
 ```bash
 
-Summary: 2 tests, 0 errors, 0 failures, 0 skipped
+Summary: 3 tests, 0 errors, 0 failures, 0 skipped
 
 ```
 
 ### 4. Verify failing Conditions
-The code provides the failing conditions which can be selected by passing ROS2 parameter `test_pass` with value `false`.  
+The code provides the failing conditions which can be selected by setting environment variable `TEST_PASS` with value `false`.  
 [Terminal 3]
 ```bash
 source /opt/ros/galactic/setup.bash
-cd ~/ros2_ws && colcon build && source install/setup.bash
-colcon test --packages-select tortoisebot_waypoints --event-handler=console_direct+
+cd ~/ros2_ws && colcon build --packages-select tortoisebot_waypoints && source install/setup.bash
+TEST_PASS=false colcon test --packages-select tortoisebot_waypoints --event-handler=console_direct+
 colcon test-result --all
 
 ```
@@ -73,6 +74,6 @@ colcon test-result --all
 Expected output:
 ```bash
 
-Summary: 2 tests, 1 errors, 0 failures, 1 skipped
+Summary: 3 tests, 0 errors, 3 failures, 0 skipped
 
 ```
